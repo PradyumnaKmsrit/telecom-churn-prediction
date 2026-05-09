@@ -1,6 +1,8 @@
 # 📡 Telecom Customer Churn Prediction
 
 An end-to-end machine learning project to predict customer churn for a telecom company using the IBM Telco Customer Churn dataset.
+🚀 **Live Demo:** https://telecom-churn-prediction-xp5dquppajavutbsrtu6mu.streamlit.app
+
 
 ---
 
