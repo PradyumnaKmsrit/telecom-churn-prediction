@@ -2,10 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# ── STEP 1: Load ──────────────────────────────────────────────
+#  Load Data
 df = pd.read_csv("telco.csv")
 
-# ── STEP 2: Clean ─────────────────────────────────────────────
+# Clean 
 df['Total Charges'] = pd.to_numeric(df['Total Charges'], errors='coerce')
 df.dropna(subset=['Total Charges'], inplace=True)
 
@@ -22,7 +22,7 @@ df['Internet Type'] = df['Internet Type'].fillna('None')
 print("Shape:", df.shape)
 print("Nulls:", df.isnull().sum().sum())
 print(df.isnull().sum()[df.isnull().sum() > 0])
-# ── STEP 3: EDA ───────────────────────────────────────────────
+# EDA 
 fig, axes = plt.subplots(2, 3, figsize=(18, 10))
 fig.suptitle('Telco Churn EDA', fontsize=16)
 
@@ -51,7 +51,7 @@ axes[1,2].tick_params(axis='x', rotation=15)
 plt.tight_layout()
 plt.show()
 plt.close()
-# ── STEP 4: Preprocessing ─────────────────────────────────────
+#Preprocessing 
 from sklearn.preprocessing import LabelEncoder
 
 df['Churn Label'] = df['Churn Label'].map({'Yes': 1, 'No': 0})
@@ -71,7 +71,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import StandardScaler
 
-# ── STEP 5: Split ─────────────────────────────────────────────
+#Split 
 X = df.drop('Churn Label', axis=1)
 y = df['Churn Label']
 
@@ -82,7 +82,7 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# ── STEP 6: Train & Evaluate Models ───────────────────────────
+#Train & Evaluate Models
 
 # Logistic Regression
 lr = LogisticRegression(max_iter=1000)
@@ -102,7 +102,7 @@ print(classification_report(y_test, rf_pred))
 
 from xgboost import XGBClassifier
 
-# ── STEP 7: XGBoost with class imbalance handling ─────────────
+#XGBoost with class imbalance handling 
 scale = (y_train == 0).sum() / (y_train == 1).sum()
 
 xgb = XGBClassifier(n_estimators=100, scale_pos_weight=scale, 
@@ -116,7 +116,7 @@ print(classification_report(y_test, xgb_pred))
 
 from sklearn.model_selection import RandomizedSearchCV
 
-# ── STEP 8: Hyperparameter Tuning ─────────────────────────────
+#Hyperparameter Tuning
 params = {
     'n_estimators': [100, 200, 300],
     'max_depth': [3, 5, 7],
@@ -139,12 +139,12 @@ print(classification_report(y_test, best_pred))
 
 import joblib
 
-# ── STEP 9: Save Model ────────────────────────────────────────
+#Save Model
 joblib.dump(search.best_estimator_, 'churn_model.pkl')
 joblib.dump(scaler, 'scaler.pkl')
 print("Model saved!")
 
-# ── STEP 10: Feature Importance ───────────────────────────────
+#Feature Importance
 import numpy as np
 
 feature_names = X.columns
